@@ -104,25 +104,24 @@ def read_result():
             elif play[0] == 2:
                 row = play[1][0]
                 col = play[1][1]
-                b1[row][col] -= 1/len(game)
+                b2[row][col] -= 1/len(game)
 
     for game in results["2"]:
         for play in game:
             if play[0] == 1:
                 row = play[1][0]
                 col = play[1][1]
-                b2[row][col] -= 1/len(game)
+                b1[row][col] -= 1/len(game)
             elif play[0] == 2:
                 row = play[1][0]
                 col = play[1][1]
                 b2[row][col] += 1/len(game)
 
-    print(len(results["1"]) + len(results["2"]))
     print(b1)
     print(b2)
         
 
 
 
-
+play_game()
 read_result()
