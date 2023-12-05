@@ -1,5 +1,5 @@
 import asyncio
-#import websockets
+import websockets
 import random
 import random
 import time
@@ -50,46 +50,49 @@ class Connect4:
        for row in self.board:
            print(' '.join(str(cell) for cell in row))
 
-def play_game():
+def play_game(col):
    while True:
-        start_time = time.time()
-        f = open("results_v2.json","w",encoding="utf-8")
-        r = dict()
-        r[1] = []
-        r[2] = []            
-        while (time.time() - start_time) <= 4:
-            #print("hi")
-            game_temp = copy.deepcopy(game)
-            result = []
-            while True:
-                col = random.randint(0,6)
+        if game.current_player == 1:
+            col = col
+        elif game.current_player == 2:
+            start_time = time.time()
+            f = open("results_v2.json","w",encoding="utf-8")
+            r = dict()
+            r[1] = []
+            r[2] = []            
+            while (time.time() - start_time) <= 4:
+                #print("hi")
+                game_temp = copy.deepcopy(game)
+                result = []
+                while True:
+                    col = random.randint(0,6)
 
-                if not game_temp.drop_piece(col,result):
-                    continue
+                    if not game_temp.drop_piece(col,result):
+                        continue
 
-                if game_temp.check_win():
-                    r[game_temp.current_player].append(result)
-                    break
-                else:
-                    n = 0
-                    for row in game_temp.board:
-                        if 0 in row:
-                            n += 1
-                    if n == 0:
+                    if game_temp.check_win():
+                        r[game_temp.current_player].append(result)
                         break
-                game_temp.current_player = 2 if game_temp.current_player == 1 else 1
-        r = json.dumps(r)
-        f.write(r)
-        f.close()
+                    else:
+                        n = 0
+                        for row in game_temp.board:
+                            if 0 in row:
+                                n += 1
+                        if n == 0:
+                            break
+                    game_temp.current_player = 2 if game_temp.current_player == 1 else 1
+            r = json.dumps(r)
+            f.write(r)
+            f.close()
 
-        b = read_result()
-        temp = 0
-        col = 0
-        for r in range(6):
-            for c in range(7):
-                if b[r][c] > temp:
-                    temp = b[r][c]
-                    col = c
+            b = read_result()
+            temp = 0
+            col = 0
+            for r in range(6):
+                for c in range(7):
+                    if b[r][c] > temp:
+                        temp = b[r][c]
+                        col = c
 
 
             
@@ -98,7 +101,8 @@ def play_game():
         if not game.drop_piece(col):
             continue
 
-        
+        game.current_player = 2 if game.current_player == 1 else 1
+
         return col
 
 
@@ -124,6 +128,6 @@ game.drop_piece(3)
 play_game()
 
 def calculate_move(col):
-    col = play_game()
+    col = play_game(col)
 
     return col
