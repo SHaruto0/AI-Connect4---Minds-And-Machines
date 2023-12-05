@@ -85,8 +85,6 @@ def play_game():
             f.write(r)
             f.close()
 
-            allowed = allowed_play(game)
-
             b = read_result()
             temp = 0
             col = 0
