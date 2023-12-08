@@ -1,2 +1,3 @@
 # AI-Connect4---Minds-And-Machines
-hi
+
+Code of Connect 4 AI for Minds and Machines Final Project.
