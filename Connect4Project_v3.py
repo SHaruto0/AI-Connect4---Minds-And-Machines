@@ -10,10 +10,15 @@ class Connect4:
 
    def drop_piece(self, column,result=[]):
        for row in range(5, -1, -1):
-           if self.board[row][column] == 0:
-               result.append([self.current_player,(row,column)])
-               self.board[row][column] = self.current_player
-               return True
+           try:
+                if self.board[row][column] == 0:
+                    result.append([self.current_player,(row,column)])
+                    self.board[row][column] = self.current_player
+                    return True
+           except:
+               print("Not a Valid Input")
+               print()
+               return False
        return False
 
    def check_win(self):
@@ -91,17 +96,10 @@ def play_game():
             f.write(r)
             f.close()
 
-            b = read_result()
-            temp = 0
-            col = 0
-            for r in range(6):
-                for c in range(7):
-                    if b[r][c] > temp:
-                        temp = b[r][c]
-                        col = c
+            col = read_result()
+            print()
+            print("AI Placed In Column "+str(col))
 
-
-            
         #col = int(input("Player " + str(game.current_player) + ", choose a column to drop your piece: "))
 
         if not game.drop_piece(col):
@@ -110,10 +108,19 @@ def play_game():
 
         if game.check_win():
             game.print_board()
+            print()
             print("Player " + str(game.current_player) + " wins!")
             result.append(game.current_player)
             f.write(str(result)+"\n")
             break
+        else:
+            n = 0
+            for row in game.board:
+                if 0 in row:
+                    n += 1
+            if n == 0:
+                print("It's A Tie")
+                break
 
         game.current_player = 2 if game.current_player == 1 else 1
 
@@ -135,13 +142,43 @@ def read_result():
             if play[0] == 2:
                 b[play[1][0]][play[1][1]] += 1
 
+    print(analyze_boards[0].board)
+
+    total_games = [0 for _ in range(7)]
+    for i in range(7):
+        for g1 in results["1"]:
+            if g1[0][1][1] == i:
+                total_games[i] += 1
+        for g2 in results["2"]:
+            if g2[0][1][1] == i:
+                total_games[i] += 1
+
+
+    i = 0
     for board in analyze_boards:
         b = board.board
         for row in range(6):
             for col in range(7):
-                b[row][col] /= (len(results["1"]) + len(results["2"]))
+                try:
+                    b[row][col] /= total_games[i]
+                except:
+                    pass
+        #analyze_boards[i] = b
+        i += 1
 
-    return b
+    rate = 0
+    c = 0
+    for b in range(len(analyze_boards)):
+        board = analyze_boards[b]
+        count = 0
+        for row in board.board:
+            for col in row:
+                count += col
+        if count > rate:
+            rate = count
+            c = b
+
+    return c
 
     
 play_game()
