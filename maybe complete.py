@@ -1,7 +1,6 @@
 import asyncio
 import websockets
 import random
-import random
 import time
 import copy
 import json
